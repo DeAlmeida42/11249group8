@@ -1,0 +1,8 @@
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19000,
+  "expoServerNgrokUrl": "https://b2-kdi.gt23.cfarer.exp.direct",
+  "packagerNgrokUrl": "https://packager.b2-kdi.gt23.cfarer.exp.direct",
+  "ngrokPid": 21092
+}
