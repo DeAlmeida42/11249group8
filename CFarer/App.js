@@ -1,11 +1,28 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button, Alert, TextInput, Touchable, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Button, Alert, TextInput, Touchable, TouchableOpacity, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {Camera} from 'expo-camera'
+import MapView, { AnimatedRegion, MarkerAnimated, Polyline } from 'react-native-maps';
 
 
 
+
+
+function MapScreen( { navigation }) {
+
+  return (
+    <View style={styles.container}>
+      <MapView style={styles.map}
+        showsUserLocation
+        followsUserLocation
+        loadingEnabled
+        
+      >
+      </MapView>
+    </View>
+  );
+}
 
 function CameraScreen( { navigation }) {
 
@@ -46,7 +63,7 @@ function CameraScreen( { navigation }) {
         </Button>
        <Button title="Take Picture" onPress={() => takePicture()} />
         {image && <Image source={{uri: image}} style={{flex:1}}/>}
-        
+
    </View>
   );
 }
@@ -114,6 +131,11 @@ function HomeScreen({ navigation }) {
         </Text>
         
       </TouchableOpacity>
+
+      <Button
+        title="Map"
+        onPress={() => navigation.navigate('Map')}
+      />
     </View>
   );
 }
@@ -174,6 +196,10 @@ export default function App() {
           name="Camera"
           component={CameraScreen}
         />
+        <Stack.Screen
+          name="Map"
+          component={MapScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
 
@@ -200,5 +226,9 @@ const styles = StyleSheet.create({
   fixedRatio: {
     flex: 1,
     aspectRatio: 1
+  },
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height
   }
 });
