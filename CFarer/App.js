@@ -10,6 +10,7 @@ import MapView, { AnimatedRegion, MarkerAnimated, Polyline } from 'react-native-
 
 
 function MapScreen( { navigation }) {
+  const state = null;
 
   return (
     <View style={styles.container}>
@@ -17,8 +18,13 @@ function MapScreen( { navigation }) {
         showsUserLocation
         followsUserLocation
         loadingEnabled
-        
+        onUserLocationChange={e => console.log(e.nativeEvent.coordinate.latitude)}
       >
+      <TouchableOpacity style={[styles.bubble, styles.distanceButton]}>
+          <Text style={styles.bottomBarContent}>
+            {parseFloat("1.234").toFixed(2)} km
+          </Text>
+      </TouchableOpacity>
       </MapView>
     </View>
   );
@@ -108,30 +114,10 @@ function HomeScreen({ navigation }) {
         title="Milestones/Challenges"
         onPress={() => navigation.navigate('Milestones')} />
       
-      <TouchableOpacity
-        style={{
-          width: 130,
-          borderRadius: 4,
-          backgroundColor: 'blue',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: 40
-        }}
+      <Button 
+        title="Camera Detection"
         onPress={() => navigation.navigate('Camera')}
-      >
-        <Text 
-        style={{
-          color: '#fff',
-          fontWeight: 'bold',
-          textAlign: 'center'
-        }}
-        >
-          Use Camera
-        </Text>
-        
-      </TouchableOpacity>
-
+      />
       <Button
         title="Map"
         onPress={() => navigation.navigate('Map')}
@@ -174,7 +160,7 @@ export default function App() {
         }}
       >
         <Stack.Screen
-          name = "Start"
+          name = "CFarer"
           component={StartScreen}
         />
         <Stack.Screen 
@@ -230,5 +216,24 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height
+  },
+  distanceButtonContainer: {
+    flexDirection: "row",
+    marginVertical: 20,
+    backgroundColor: "transparent"
+  },
+  bubble: {
+    flex: 1,
+    backgroundColor: "rgba(255,255,255,0.7)",
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 20
+  },
+  distanceButton: {
+    flexDirection: 'row',
+    width: 80,
+    paddingHorizontal: 12,
+    alignItems: "center",
+    marginHorizontal: 10
   }
 });
