@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {Camera} from 'expo-camera'
 import MapView, { AnimatedRegion, MarkerAnimated, Polyline } from 'react-native-maps';
+import { auth } from './sign-in';
+import 'firebase/auth';
 
 
 
@@ -75,16 +77,42 @@ function CameraScreen( { navigation }) {
 }
 
 function StartScreen({ navigation }) {
-  const [Username, onChangeText] = React.useState(null);
+  const [Email, onChangeText] = React.useState(null);
   const [Password, onChangePassword] = React.useState(null);
 
+  React.useEffect(() => {
+    const unsubscribed = auth.onAuthStateChanged(user => {
+      if(user) {
+        navigation.navigate("Home")
+      }
+    })
+    return unsubscribed
+  }, [])
+
+  const registration=() => {
+    auth.createUserWithEmailAndPassword(Email, Password);
+    auth.then(userCredentials => {
+      const user = userCredentials.user;
+      console.log(user.Email);
+    } )
+    auth.catch(error => alert("Registration Error"))
+  }
+
+  const logIn = () => {
+    auth.signInWithEmailAndPassword(Email, Password);
+    auth.then(userCredentials => {
+      const user = userCredentials.user;
+      console.log(Email)
+    } )
+    auth.catch(error => alert("Sign In Error"))
+  }
   return (
     <SafeAreaView>
       <TextInput
         style={styles.input}
         onChangeText={onChangeText}
-        value={Username}
-        placeholder="Enter Username:"
+        value={Email}
+        placeholder="Enter Email:"
       />
       <TextInput
       secureTextEntry= {true}
@@ -95,7 +123,11 @@ function StartScreen({ navigation }) {
       />
       <Button
         title = "Sign in"
-        onPress={() => navigation.navigate('Home')}
+        onPress={logIn}
+      />
+      <Button
+        title = "Register"
+        onPress={registration}
       />
     </SafeAreaView>
   );
