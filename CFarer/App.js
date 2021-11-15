@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button, Alert, TextInput, Touchable, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Alert, TextInput, Touchable, TouchableOpacity, Dimensions, ImageComponent } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {Camera} from 'expo-camera'
@@ -7,6 +7,7 @@ import MapView, { AnimatedRegion, MarkerAnimated, Polyline } from 'react-native-
 import { auth } from './sign-in';
 import 'firebase/auth';
 import haversine from 'haversine';
+import {Button} from 'react-native-elements';
 
 
 
@@ -117,7 +118,6 @@ function StartScreen({ navigation }) {
       if (errorCode == 'auth/weak-password') { alert('Password was too weak.') }
       else { alert(errorMsg) }
       console.log(error);
-
     })
   }
 
@@ -129,7 +129,6 @@ function StartScreen({ navigation }) {
     } )
     .catch(error => {
       var errorMsg = error.message;
-
       alert(errorMsg);
       console.log(error);
     })
@@ -150,10 +149,12 @@ function StartScreen({ navigation }) {
         placeholder="Enter Password"
       />
       <Button
-        title = "Sign in"
+        buttonStyle = {styles.signInButton}
+        title = "Sign In"
         onPress={logIn}
       />
       <Button
+        buttonStyle = {styles.GenericButton}
         title = "Register"
         onPress={registration}
       />
@@ -171,6 +172,7 @@ function HomeScreen({ navigation }) {
         />
       
       <Button
+        buttonStyle = {styles.signInButton}
         title="Milestones/Challenges"
         onPress={() => navigation.navigate('Milestones')} />
       
@@ -179,6 +181,7 @@ function HomeScreen({ navigation }) {
         onPress={() => navigation.navigate('Camera')}
       />
       <Button
+        buttonStyle = {styles.signInButton}
         title="Map"
         onPress={() => navigation.navigate('Map')}
       />
@@ -260,8 +263,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   input: {
-    height: 40,
-    margin: 12,
+    height: 50,
+    margin: 15,
     borderWidth: 1,
     padding: 10,
   },
@@ -295,5 +298,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     alignItems: "center",
     marginHorizontal: 10
+  },
+  signInButton: {
+    marginRight: 40,
+    marginLeft: 40,
+    marginTop: 20,
+    marginBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: "#7db564",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ffff"
+  },
+  signInText: {
+    color: "#ffff",
+    textAlign: 'center',
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  GenericButton: {
+    marginRight: 40,
+    marginLeft: 40,
+    marginTop: 20,
+    marginBottom: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ffff"
   }
 });
