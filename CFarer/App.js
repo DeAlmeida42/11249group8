@@ -37,7 +37,7 @@ function MapScreen( { navigation }) {
       >
       <TouchableOpacity style={[styles.bubble, styles.distanceButton]}>
           <Text style={styles.bottomBarContent}>
-            {parseFloat(state.distance).toFixed(4)} miles
+            {parseFloat(state.distance).toFixed(1)} miles
           </Text>
       </TouchableOpacity>
       </MapView>
@@ -95,7 +95,7 @@ function StartScreen({ navigation }) {
 
   React.useEffect(() => {
     const unsubscribed = auth.onAuthStateChanged(user => {
-      if(user) {
+      if (user) {
         navigation.navigate("Home")
       }
     })
@@ -103,21 +103,36 @@ function StartScreen({ navigation }) {
   }, [])
 
   const registration=() => {
-    auth.createUserWithEmailAndPassword(Email, Password);
-    auth.then(userCredentials => {
+    console.log(Email)
+    console.log(Password)
+    auth.createUserWithEmailAndPassword(Email, Password)
+    .then(userCredentials => {
       const user = userCredentials.user;
-      console.log(user.Email);
+      console.log(user.email);
     } )
-    auth.catch(error => alert("Registration Error"))
+    .catch(error => {
+      var errorCode = error.code;
+      var errorMsg = error.message;
+
+      if (errorCode == 'auth/weak-password') { alert('Password was too weak.') }
+      else { alert(errorMsg) }
+      console.log(error);
+
+    })
   }
 
   const logIn = () => {
-    auth.signInWithEmailAndPassword(Email, Password);
-    auth.then(userCredentials => {
+    auth.signInWithEmailAndPassword(Email, Password)
+    .then(userCredentials => {
       const user = userCredentials.user;
-      console.log(Email)
+      console.log(user.email)
     } )
-    auth.catch(error => alert("Sign In Error"))
+    .catch(error => {
+      var errorMsg = error.message;
+
+      alert(errorMsg);
+      console.log(error);
+    })
   }
   return (
     <SafeAreaView>
@@ -136,7 +151,7 @@ function StartScreen({ navigation }) {
       />
       <Button
         title = "Sign in"
-        onPress={() => navigation.navigate('Home')}
+        onPress={logIn}
       />
       <Button
         title = "Register"
@@ -147,7 +162,7 @@ function StartScreen({ navigation }) {
 }
 
 function HomeScreen({ navigation }) {
-  return (
+  return ( 
     <View style={styles.container}>
       <Text>Home Screen</Text>
       <Button
@@ -211,9 +226,9 @@ export default function App() {
         <Stack.Screen 
           name="Home"
           component={HomeScreen}
-          options={{ 
-            title: 'CFarer'
-          }} 
+          options={{
+            headerShown: false
+          }}        
         />
         <Stack.Screen 
           name="Settings"
