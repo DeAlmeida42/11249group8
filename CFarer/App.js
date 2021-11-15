@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button, Alert, TextInput, Touchable, TouchableOpacity, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -6,13 +6,26 @@ import {Camera} from 'expo-camera'
 import MapView, { AnimatedRegion, MarkerAnimated, Polyline } from 'react-native-maps';
 import { auth } from './sign-in';
 import 'firebase/auth';
+import haversine from 'haversine';
 
 
 
+function reducer(state, action) {
 
+  const start = {latitude: state.latitude, longitude: state.longitude}
+
+  const finish = {latitude: action.coordinate.latitude, longitude: action.coordinate.longitude}
+
+  return (state.latitude == 0 
+    ? 
+    {...state, latitude: action.coordinate.latitude, longitude: action.coordinate.longitude, distance: 0} 
+    : 
+    {...state, latitude: action.coordinate.latitude, longitude: action.coordinate.longitude, distance: state.distance + haversine(start, finish, {unit: 'mile'})})
+
+}
 
 function MapScreen( { navigation }) {
-  const state = null;
+  const [state, dispatch] = React.useReducer(reducer, { latitude: 0, longitude: 0, distance: 0});
 
   return (
     <View style={styles.container}>
@@ -20,11 +33,11 @@ function MapScreen( { navigation }) {
         showsUserLocation
         followsUserLocation
         loadingEnabled
-        onUserLocationChange={e => console.log(e.nativeEvent.coordinate.latitude)}
+        onUserLocationChange={e => dispatch({ type: 'latitude', coordinate: {latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude}})}
       >
       <TouchableOpacity style={[styles.bubble, styles.distanceButton]}>
           <Text style={styles.bottomBarContent}>
-            {parseFloat("1.234").toFixed(2)} km
+            {parseFloat(state.distance).toFixed(4)} miles
           </Text>
       </TouchableOpacity>
       </MapView>
@@ -123,7 +136,7 @@ function StartScreen({ navigation }) {
       />
       <Button
         title = "Sign in"
-        onPress={logIn}
+        onPress={() => navigation.navigate('Home')}
       />
       <Button
         title = "Register"
