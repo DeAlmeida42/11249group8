@@ -1,8 +1,13 @@
-# 11249group8
+# CFarer
 
 Member1: Dylan DeAlmeida
 Member2: Conner Gallimore
 Member3: Grace Tholl
+
+[Optional Login Credentials]
+
+Email: random@gmail.com
+password: hello12345!
 
 Steps to Using CFarer:
 
